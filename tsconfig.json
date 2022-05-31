@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": ".",
+    "declaration": true
+  },
+  "exclude": ["node_modules", ".yarn", "example", "test"]
+}

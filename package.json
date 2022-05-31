@@ -1,0 +1,78 @@
+{
+  "name": "@ts-plugin/loadable",
+  "version": "1.0.0",
+  "description": "TypeScript transform plugin for @loadable/component",
+  "repository": "https://github.com/ts-plugin/loadable-component.git",
+  "author": "github@lyn.one",
+  "license": "MIT",
+  "packageManager": "yarn@3.2.1",
+  "main": "./index.js",
+  "module": "./esm/index.js",
+  "typings": "./index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "esm/index.js"
+  ],
+  "devDependencies": {
+    "@loadable/component": "^5.15.2",
+    "@loadable/server": "^5.15.2",
+    "@loadable/webpack-plugin": "^5.15.2",
+    "@types/loadable__component": "^5.13.4",
+    "@types/loadable__server": "^5.12.6",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.5",
+    "@types/webpack": "^5.28.0",
+    "ava": "^4.2.0",
+    "cross-env": "^7.0.3",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.3",
+    "prettier": "^2.6.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "shx": "^0.3.4",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "peerDependencies": {
+    "typescript": ">= 4.2"
+  },
+  "ava": {
+    "files": [
+      "test/spec.mjs"
+    ]
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "trailingComma": "all",
+    "singleQuote": true,
+    "arrowParens": "always"
+  },
+  "lint-staged": {
+    "*.@(js|ts|md|json|yml|yaml)": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Brooooooklyn"
+  },
+  "scripts": {
+    "build": "tsc && tsc -p tsconfig.json -m esnext --outDir esm",
+    "build:example": "shx rm -rf example/dist && cross-env NODE_ENV=production webpack --config ./example/webpack.config.js && cross-env BUILD_TYPE=ssr NODE_ENV=production yarn webpack --config ./example/webpack.server.js",
+    "start": "node ./example/dist/server.js",
+    "lint": "prettier --check '*.@(js|ts|md|json|yml|yaml)'",
+    "test": "ava"
+  }
+}

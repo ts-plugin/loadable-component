@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          check-latest: true
+          cache: 'yarn'
+
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        with:
+          path: .yarn/cache
+          key: yarn-node@16-cache
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Build
+        run: yarn build
+        env:
+          NODE_ENV: production
+
+      - name: Unit tests
+        run: yarn test
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: Publish
+        run: |
+          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            npm publish --access public
+          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            npm publish --tag next --access public
+          else
+            echo "Not a release, skipping publish"
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

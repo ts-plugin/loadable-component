@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "react-jsx"
+  },
+  "include": ["src"],
+  "exclude": []
+}
